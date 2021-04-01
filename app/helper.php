@@ -1,5 +1,6 @@
 <?php
 
+use App\Jobs\BotPro\SendMsg;
 use App\Models\Option;
 
 function get_options($name){
@@ -33,4 +34,16 @@ function read_file($file_path)
     } else {
         return null;
     }
+}
+
+/**
+ * 发送通知
+ *
+ * @param array 发送数据 $data
+ * @param string 请求路径 $action
+ * @param string 网站 $url
+ * @return void
+ */
+function sendMsg($data,$action,$url=null){
+    return dispatch(new SendMsg($data,$action,$url));
 }

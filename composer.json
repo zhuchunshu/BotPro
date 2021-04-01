@@ -12,6 +12,7 @@
         "guzzlehttp/guzzle": "^7.0.1",
         "illuminated/console-mutex": "^8.1",
         "laravel/framework": "^8.12",
+        "laravel/horizon": "^5.7",
         "laravel/tinker": "^2.5",
         "ratchet/pawl": "^0.3.5"
     },

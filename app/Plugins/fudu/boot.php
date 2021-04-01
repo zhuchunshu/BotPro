@@ -9,6 +9,7 @@ class boot{
     
     public function handle(){
         // $this->route();
+        
     }
 
 }

@@ -45,7 +45,12 @@ class Run extends Command
         if ($run->Check()) {
             \Ratchet\Client\connect($run->zxws)->then(function($conn) {
                 $conn->on('message', function($msg) use ($conn) {
-                    $this->info(BotCore::Run($msg)."\n");
+                    try {
+                        $this->info($msg."\n\n");
+                        $this->info((new BotCore)->Run($msg)."\n");
+                    } catch (\Throwable $th) {
+                        $this->error($th."\n");
+                    }
                     //$conn->close();
                 });
             }, function ($e) {

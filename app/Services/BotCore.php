@@ -2,11 +2,57 @@
 
 namespace App\Services;
 
-class BotCore {
+use App\Models\Plugin;
+use App\Models\BotCore as BotCoreModels;
+use Illuminate\Support\Facades\Http;
 
-    public static function Run($data){
+class BotCore
+{
+
+    public function Run($data)
+    {
         $data = json_decode($data);
-        return $data->post_type;
+        $type = $data->post_type;
+
+        if (method_exists(new BotCore(), $type)) {
+            return $this->$type($data);
+        }
     }
 
+    public function Send($data, $action, $url = null)
+    {
+        $url = get_options('BOT_HTTP');
+        $re = Http::withToken(get_options('BOT_TOKEN'))->post($url . $action, $data);
+        return $re->json();
+    }
+
+    public function message($data)
+    {
+        if ($data->message_type == "group") {
+            // 群组消息
+            if (BotCoreModels::where(['type' => 'group', 'value' => $data->group_id])->count()) {
+                $pluginManager = new PluginManager();
+                foreach ($pluginManager->getAllPlugins() as $name => $value) {
+                    $value['PluginMark']=$name;
+                    if (Plugin::where(['name' => $name, 'status' => 1])->count()) {
+                        if (@count($value['data']['post_type']['message']['group'])) {
+                            foreach ($value['data']['post_type']['message']['group'] as $dataClass) {
+                                $c = $value['class'] . "src\\" . $dataClass;
+                                if (method_exists(new $c(), 'handle')) {
+                                    try {
+                                        (new $c())->handle($data,$value);
+                                    } catch (\Throwable $th) {
+                                        sendMsg([
+                                            'group_id' => $data->group_id,
+                                            'message' => "出错啦:\n\n" . $th
+                                        ], "send_group_msg");
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
