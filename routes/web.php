@@ -1,6 +1,8 @@
 <?php
 
+use App\Services\PluginManager;
 use Illuminate\Support\Facades\Route;
+use Psr\Container\ContainerInterface;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', function (PluginManager $pluginManager,ContainerInterface $container) {
+    //return $service = $container->get('Service');
+    return $pluginManager->getAllPlugins();
 });

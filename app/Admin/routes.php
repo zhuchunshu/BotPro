@@ -38,4 +38,11 @@ Route::group([
         $router->get('/{id}/edit','BotCoreController@edit');
     });
 
+    // 插件
+
+    $router->group(['prefix' => 'Plugin'],function(Router $router){
+        $router->get('/','PluginController@index');
+        $router->put('/{name}','PluginController@update');
+    });
+
 });

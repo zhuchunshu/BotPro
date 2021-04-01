@@ -3,6 +3,7 @@
 namespace App\Console\Commands\BotPro;
 
 use App\BotPro\Bootstrap;
+use App\Services\BotCore;
 use Illuminate\Console\Command;
 use Illuminated\Console\WithoutOverlapping;
 
@@ -44,7 +45,7 @@ class Run extends Command
         if ($run->Check()) {
             \Ratchet\Client\connect($run->zxws)->then(function($conn) {
                 $conn->on('message', function($msg) use ($conn) {
-                    $this->info("$msg \n");
+                    $this->info(BotCore::Run($msg)."\n");
                     //$conn->close();
                 });
             }, function ($e) {

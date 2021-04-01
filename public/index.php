@@ -1,7 +1,9 @@
 <?php
 
-use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Http\Request;
+use Illuminate\Contracts\Http\Kernel;
+use Illuminate\Contracts\Support\Jsonable;
+use Illuminate\Contracts\Support\Arrayable;
 
 define('LARAVEL_START', microtime(true));
 
@@ -46,10 +48,28 @@ require __DIR__.'/../vendor/autoload.php';
 
 $app = require_once __DIR__.'/../bootstrap/app.php';
 
-$kernel = $app->make(Kernel::class);
+$kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
 
-$response = tap($kernel->handle(
-    $request = Request::capture()
-))->send();
+$response = $kernel->handle(
+    $request = Illuminate\Http\Request::capture()
+);
+
+// 取到内容
+$content = $response->original;
+
+// 检查原始内容的类型是否需要转 json
+if (
+    $content instanceof Arrayable ||
+    $content instanceof Jsonable ||
+    $content instanceof ArrayObject ||
+    $content instanceof JsonSerializable ||
+    is_array($content)
+) {
+    // 重新设置响应内容
+    $response->setContent(json_encode($content, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+}
+
+
+$response->send();
 
 $kernel->terminate($request, $response);
