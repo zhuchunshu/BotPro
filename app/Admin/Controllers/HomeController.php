@@ -14,11 +14,11 @@ class HomeController extends Controller
     public function index(Content $content)
     {
         return $content
-            ->header('Dashboard')
-            ->description('Description...')
+            ->header('控制面板')
+            ->description('BotPro后台管理面板')
             ->body(function (Row $row) {
                 $row->column(6, function (Column $column) {
-                    $column->row(Dashboard::title());
+                    $column->row($this->info());
                     $column->row(new Examples\Tickets());
                 });
 
@@ -32,5 +32,8 @@ class HomeController extends Controller
                     $column->row(new Examples\ProductOrders());
                 });
             });
+    }
+    public function info(){
+        return view('info');
     }
 }

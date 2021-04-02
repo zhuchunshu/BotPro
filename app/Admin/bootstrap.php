@@ -25,6 +25,11 @@ use Dcat\Admin\Layout\Menu;
  * Admin::js('/packages/prettydocs/js/main.js');
  *
  */
+Dcat\Admin\Color::extend('pink', [
+    'primary'        => '#FFC0CB',
+    'primary-darker' => '#FFC0CB',
+    'link'           => '#FFC0CB',
+]);
 
 Admin::menu(function (Menu $menu) {
     $menu->add([

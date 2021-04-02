@@ -1,7 +1,9 @@
 <?php
 
 use App\Jobs\BotPro\SendMsg;
+use App\Models\BotCore;
 use App\Models\Option;
+use App\Services\BotCore as ServicesBotCore;
 
 function get_options($name){
     if(Option::where('name',$name)->count()){
@@ -46,4 +48,46 @@ function read_file($file_path)
  */
 function sendMsg($data,$action,$url=null){
     return dispatch(new SendMsg($data,$action,$url));
+}
+
+/**
+ * 发送数据
+ *
+ * @param array 发送数据 $data
+ * @param string 请求路径 $action
+ * @param string 网站 $url
+ * @return void
+ */
+function sendData($data,$action,$url=null){
+    $ServicesBotCore = new ServicesBotCore();
+    return $ServicesBotCore->Send($data,$action,$url);
+}
+
+/**
+ * 分割指令
+ *
+ * @param object $data
+ * @param string $delimiter
+ * @return array
+ */
+function GetZhiling($data,$delimiter=" "){
+    return explode($delimiter,$data->message);
+}
+
+function authorizeGroup_get(){
+    return BotCore::where(['type' => 'group'])->get();
+}
+
+function authorizeGroup_check(int $number){
+    return BotCore::where(['type' => 'group','value' => $number])->count();
+}
+
+function Json_Api($status,$message,$type){
+    return [
+        'status'=>$status,
+        'data'=>[
+            'message' => $message,
+            'type' => $type
+        ]
+    ];
 }

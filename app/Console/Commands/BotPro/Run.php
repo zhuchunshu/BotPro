@@ -5,6 +5,7 @@ namespace App\Console\Commands\BotPro;
 use App\BotPro\Bootstrap;
 use App\Services\BotCore;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Artisan;
 use Illuminated\Console\WithoutOverlapping;
 
 class Run extends Command
@@ -41,6 +42,7 @@ class Run extends Command
      */
     public function handle()
     {
+        
         $run = new Bootstrap();
         if ($run->Check()) {
             \Ratchet\Client\connect($run->zxws)->then(function($conn) {
