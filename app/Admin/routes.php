@@ -42,7 +42,9 @@ Route::group([
 
     $router->group(['prefix' => 'Plugin'],function(Router $router){
         $router->get('/','PluginController@index');
+        $router->get('/create','PluginController@create');
         $router->put('/{name}','PluginController@update');
+        $router->post('/','PluginController@store');
     });
 
 });

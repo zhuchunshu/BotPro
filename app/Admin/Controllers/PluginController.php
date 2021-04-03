@@ -2,15 +2,20 @@
 
 namespace App\Admin\Controllers;
 
+use ZipArchive;
 use Faker\Factory;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
+use Illuminate\Http\Request;
 use Dcat\Admin\Layout\Content;
 use App\Services\PluginManager;
+use Madnest\Madzipper\Madzipper;
 use App\Admin\Repositories\Plugin;
 use App\Http\Controllers\Controller;
 use App\Models\Plugin as ModelsPlugin;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class PluginController extends Controller
 {
@@ -22,18 +27,17 @@ class PluginController extends Controller
     protected function grid()
     {
         return new Grid(null, function (Grid $grid) {
-            $grid->column('id','插件标识')->explode()->label();
-            $grid->column('namespace','插件命名空间')->explode('\\')->label();
-            $grid->column('path','插件路径');
-            $grid->column('data','插件信息')->explode();
-            $grid->column('status','开启/关闭')->status()->switch();
+            $grid->column('id', '插件标识')->explode()->label();
+            $grid->column('namespace', '插件命名空间')->explode('\\')->label();
+            $grid->column('path', '插件路径');
+            $grid->column('data', '插件信息')->explode();
+            $grid->column('status', '开启/关闭')->status()->switch();
             $grid->disableRowSelector();
-            $grid->disableCreateButton();
+            //$grid->disableCreateButton();
             $grid->disableActions();
             $grid->disableBatchDelete();
             $grid->disablePagination();
             $grid->model()->setData($this->generate());
-            
         });
     }
 
@@ -42,11 +46,12 @@ class PluginController extends Controller
      *
      * @return array
      */
-    public function generate() {
+    public function generate()
+    {
         $PluginManager = new PluginManager();
         $data = [];
         foreach ($PluginManager->getAllPlugins() as $key => $value) {
-            $check = ModelsPlugin::where(['name' => $key,'status' => 1])->count();
+            $check = ModelsPlugin::where(['name' => $key, 'status' => 1])->count();
             $data[] = [
                 'id' => $key,
                 'name' => $key,
@@ -87,14 +92,8 @@ class PluginController extends Controller
     protected function form()
     {
         return Form::make(new Plugin(), function (Form $form) {
-            $form->display('id');
-            $form->text('name');
-            $form->text('path');
-            $form->text('class');
-            $form->text('status');
-        
-            $form->display('created_at');
-            $form->display('updated_at');
+            $form->file('file', '选择插件')->accept('zip')->removable();
+            $form->disableFooter();
         });
     }
     /**
@@ -205,36 +204,35 @@ class PluginController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function update($name,Form $form)
+    public function update($name, Form $form)
     {
-        $status = request()->input('status',0);
-        if(ModelsPlugin::where('name',$name)->count()){
+        $status = request()->input('status', 0);
+        if (ModelsPlugin::where('name', $name)->count()) {
             // 存在
-            ModelsPlugin::where('name',$name)->update([
+            ModelsPlugin::where('name', $name)->update([
                 'status' => $status
             ]);
-            if($status){
-                $ev="启用";
-            }else{
-                $ev="禁用";
+            if ($status) {
+                $ev = "启用";
+            } else {
+                $ev = "禁用";
             }
-        }else{
+        } else {
             // 不存在
             ModelsPlugin::insert([
                 'name' => $name,
                 'status' => $status,
                 'created_at' => date("Y-m-d H:i:s")
             ]);
-            $ev="禁用";
+            $ev = "禁用";
         }
         return [
-            'status'=>true,
-            'data'=>[
-                'message' => "插件:".$name.$ev.'成功!',
+            'status' => true,
+            'data' => [
+                'message' => "插件:" . $name . $ev . '成功!',
                 'type' => 'success'
             ]
         ];
-        
     }
 
     /**
@@ -242,9 +240,25 @@ class PluginController extends Controller
      *
      * @return mixed
      */
-    public function store()
+    public function store(Request $request)
     {
-        return $this->form()->store();
+        //$path = $request->file('_file_')->store('file');
+        $file = $request->_file_;
+        $file->move(app_path("Plugins"), $file->getClientOriginalName());
+        $path = app_path("Plugins/" . $file->getClientOriginalName());
+        //实例化ZipArchive类
+        $zip = new ZipArchive();
+        //打开压缩文件，打开成功时返回true
+        if ($zip->open($path) === true) {
+            //解压文件到获得的路径a文件夹下
+            $zip->extractTo(app_path("Plugins/"));
+            //关闭
+            $zip->close();
+            File::delete($path);
+            return Json_Api(true,"插件安装成功!","success");
+        } else {
+            return Json_Api(true,"插件上传失败!","error");
+        }
     }
 
     /**

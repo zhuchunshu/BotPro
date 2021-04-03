@@ -39,19 +39,6 @@ class GroupQunfa extends Controller
     }
     public function generate()
     {
-        // $PluginManager = new PluginManager();
-        // $data = [];
-        // foreach ($PluginManager->getAllPlugins() as $key => $value) {
-        //     $check = Plugin::where(['name' => $key,'status' => 1])->count();
-        //     $data[] = [
-        //         'id' => $key,
-        //         'name' => $key,
-        //         'data' => ($value['data']),
-        //         'path' => $value['path'],
-        //         'namespace' => $value['class'],
-        //         'status' => $check,
-        //     ];
-        // }
         $data = sendData([], "get_group_list");
         return $data['data'];
     }
