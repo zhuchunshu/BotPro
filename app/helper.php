@@ -1,8 +1,9 @@
 <?php
 
-use App\Jobs\BotPro\SendMsg;
-use App\Models\BotCore;
 use App\Models\Option;
+use App\Models\BotCore;
+use Illuminate\Support\Str;
+use App\Jobs\BotPro\SendMsg;
 use App\Services\BotCore as ServicesBotCore;
 
 function get_options($name){
@@ -90,4 +91,10 @@ function Json_Api($status,$message,$type){
             'type' => $type
         ]
     ];
+}
+
+function cq_at_qq($text){
+    $text = Str::after($text, 'qq=');
+    $text = Str::before($text, ']');
+    return $text;
 }

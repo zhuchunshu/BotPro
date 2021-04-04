@@ -2,8 +2,9 @@
 
 namespace App\Services;
 
-use App\Models\Plugin;
-use App\Models\BotCore as BotCoreModels;
+use App\BotPro\Event\notice;
+use App\BotPro\Event\message;
+use App\BotPro\Event\request;
 use Illuminate\Support\Facades\Http;
 
 class BotCore
@@ -28,56 +29,15 @@ class BotCore
 
     public function message($data)
     {
-        if ($data->message_type == "group") {
-            // 群组消息
-            if (BotCoreModels::where(['type' => 'group', 'value' => $data->group_id])->count()) {
-                $pluginManager = new PluginManager();
-                foreach ($pluginManager->getAllPlugins() as $name => $value) {
-                    $value['PluginMark'] = $name;
-                    if (Plugin::where(['name' => $name, 'status' => 1])->count()) {
-                        if (@count($value['data']['post_type']['message']['group'])) {
-                            foreach ($value['data']['post_type']['message']['group'] as $dataClass) {
-                                $c = $value['class'] . "src\\" . $dataClass;
-                                if (method_exists(new $c(), 'register')) {
-                                    try {
-                                        (new $c())->register($data, $value);
-                                    } catch (\Throwable $th) {
-                                        sendMsg([
-                                            'group_id' => $data->group_id,
-                                            'message' => "出错啦:\n\n" . $th
-                                        ], "send_group_msg");
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+        if (method_exists(new message(), $data->message_type)) {
+            $c = $data->message_type;
+            return (new message())->$c($data);
         }
-
-        if ($data->message_type == "private") {
-            // 私聊
-            $pluginManager = new PluginManager();
-            foreach ($pluginManager->getAllPlugins() as $name => $value) {
-                $value['PluginMark'] = $name;
-                if (Plugin::where(['name' => $name, 'status' => 1])->count()) {
-                    if (@count($value['data']['post_type']['message']['private'])) {
-                        foreach ($value['data']['post_type']['message']['private'] as $dataClass) {
-                            $c = $value['class'] . "src\\" . $dataClass;
-                            if (method_exists(new $c(), 'register')) {
-                                try {
-                                    (new $c())->register($data, $value);
-                                } catch (\Throwable $th) {
-                                    sendMsg([
-                                        'user_id' => $data->user_id,
-                                        'message' => "出错啦:\n\n" . $th
-                                    ], "send_private_msg");
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+    }
+    public function notice($data){
+        return (new notice())->handle($data);
+    }
+    public function request($data){
+        return (new request())->handle($data);
     }
 }
