@@ -17,5 +17,5 @@ use Psr\Container\ContainerInterface;
 
 Route::get('/', function () {
     //return $service = $container->get('Service');
-    return md5_file(app_path('BotPro/Core.php'));
+    return redirect('/admin');
 });
