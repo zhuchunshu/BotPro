@@ -62,7 +62,8 @@ class Install extends Command
                     'MAIL_PORT' => $smtp['port'],
                     'MAIL_USERNAME' => $smtp['user'],
                     'MAIL_PASSWORD' => $smtp['pwd'],
-                    'MAIL_ENCRYPTION' => $smtp['en']
+                    'MAIL_ENCRYPTION' => $smtp['en'],
+                    'APP_DEBUG' => 'false'
                 ];
                 $this->modifyEnv($env);
                 Artisan::call('key:generate');
