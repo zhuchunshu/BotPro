@@ -41,7 +41,7 @@ class Install extends Command
     public function handle()
     {
         if(PHP_VERSION>="7.3.0"){
-            if(config('app.url')=="网站地址"){
+            if(config('app.url')=="http://localhost"){
                 $web_url = $this->ask('网站地址(https://www.codefec.com)');
                 $database = [];
                 $database['name'] = $this->ask('数据库名');
