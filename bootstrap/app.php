@@ -52,4 +52,10 @@ $app->singleton(
 |
 */
 
+if(md5_file(app_path('Services/Core.php'))!="31487cd7c095e6b0396eca44411890ea"){
+    dd([
+        base64_decode("5byA5Y+R5LiN5piTLOivt+WLv+egtOino+S8oOaSrQ=="),
+        base64_decode("6LCi6LCi5oKo"),
+    ]);
+}
 return $app;

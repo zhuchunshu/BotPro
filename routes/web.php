@@ -15,7 +15,7 @@ use Psr\Container\ContainerInterface;
 |
 */
 
-Route::get('/', function (PluginManager $pluginManager,ContainerInterface $container) {
+Route::get('/', function () {
     //return $service = $container->get('Service');
-    return $pluginManager->getAllPlugins();
+    return md5_file(app_path('BotPro/Core.php'));
 });

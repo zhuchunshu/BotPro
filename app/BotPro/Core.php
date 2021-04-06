@@ -48,5 +48,4 @@ class Core {
             Route::post('/auth', [BotCoreController::class,'post']);
         });
     }
-
 }

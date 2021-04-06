@@ -177,6 +177,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\PluginServiceProvider::class,
         App\Providers\BotCoreServiceProvider::class,
+        App\Providers\CoreServiceProvider::class,
 
     ],
 
