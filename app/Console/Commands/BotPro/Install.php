@@ -75,7 +75,7 @@ class Install extends Command
                 $this->info('后台管理员账号创建成功!');
                 $d['BOT_TOKEN'] = $this->ask('机器人连接秘钥');
                 $d['BOT_HTTP'] = $this->ask('机器人http连接地址(http://127.0.0.1:5700/)');
-                $d['BOT_HTTP'] = $this->ask('机器人正向websocket连接地址(ws://127.0.0.1:6700/)');
+                $d['BOT_ZXWS'] = $this->ask('机器人正向websocket连接地址(ws://127.0.0.1:6700/)');
                 foreach ($d as $key => $value) {
                     Option::insert([
                         'name' => $key,
@@ -86,6 +86,9 @@ class Install extends Command
                 $this->info('必要设置项创建成功!');
                 File::put(base_path() . DIRECTORY_SEPARATOR . 'install.lock', 'CodeFec 已安装');
                 $this->info('本次安装结束。');
+                $this->info('访问: 域名/admin 进入后台!');
+                $this->info('默认账号: admin');
+                $this->info('默认密码: admin');
             }
         }else{
             $this->error('PHP版本必须大于7.3.0');
