@@ -35,7 +35,6 @@
                     <a href="https://www.codefec.com" target="_blank">论坛</a>
                     <a href="http://www.node.tax/" id="doc-link" target="_blank">{{ ("NodeTax") }}</a>
                     <a href="https://jq.qq.com/?_wv=1027&k=cUVyWlmn" id="demo-link" target="_blank">{{ __('QQ群') }}</a>
-                    <a href="https://zhuchunshu.com" id="demo-link" target="_blank">{{ __('博客') }}</a>
                 </div>
             </div>
         </div>

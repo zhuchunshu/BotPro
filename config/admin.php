@@ -63,7 +63,7 @@ return [
 
         'namespace' => 'App\\Admin\\Controllers',
 
-        'middleware' => ['web', 'admin'],
+        'middleware' => ['web', 'admin','botcore'],
 
         'enable_session_middleware' => false,
     ],

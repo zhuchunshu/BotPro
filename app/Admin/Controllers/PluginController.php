@@ -30,7 +30,7 @@ class PluginController extends Controller
             $grid->column('id', '插件标识')->explode()->label();
             $grid->column('namespace', '插件命名空间')->explode('\\')->label();
             $grid->column('path', '插件路径');
-            $grid->column('data', '插件信息')->explode();
+            //$grid->column('data', '插件信息')->explode(",");
             $grid->column('status', '开启/关闭')->status()->switch();
             $grid->disableRowSelector();
             //$grid->disableCreateButton();

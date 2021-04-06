@@ -4,6 +4,7 @@ use App\Models\Option;
 use App\Models\BotCore;
 use Illuminate\Support\Str;
 use App\Jobs\BotPro\SendMsg;
+use App\Models\Plugin;
 use App\Services\BotCore as ServicesBotCore;
 
 function get_options($name){
@@ -12,6 +13,9 @@ function get_options($name){
     }else{
         return null;
     }
+}
+function get_options_count($name){
+    return Option::where('name',$name)->count();
 }
 function getPath($path)
 {
@@ -96,5 +100,33 @@ function Json_Api($status,$message,$type){
 function cq_at_qq($text){
     $text = Str::after($text, 'qq=');
     $text = Str::before($text, ']');
+    return $text;
+}
+/**
+ * 获取插件信息
+ *
+ * @param string $name
+ * @return object
+ */
+function get_plugin_data($name){
+    if(file_exists(app_path("Plugins/".$name."/"."data.json"))){
+        return json_decode(@read_file(app_path("Plugins/".$name."/"."data.json")));
+    }else{
+        return null;
+    }
+}
+
+function get_plugin_status($name){
+    if(Plugin::where(['name' => $name,'status' => 1])->count()){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+function _port($text)
+{
+    $text = Str::before($text, ':');
+    $text = str_replace('www.', '', $text);
     return $text;
 }
