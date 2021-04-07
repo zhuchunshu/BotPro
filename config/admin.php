@@ -12,6 +12,8 @@ return [
     |
     */
     'name' => 'BotPro',
+    
+    'DISABLE_ADMIN_OPTION_SHOW' => env('DISABLE_ADMIN_OPTION_SHOW',false),
 
     /*
     |--------------------------------------------------------------------------

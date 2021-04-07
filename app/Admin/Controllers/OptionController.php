@@ -21,7 +21,14 @@ class OptionController extends Controller
     {
         return Grid::make(new Option(), function (Grid $grid) {
             $grid->column('name');
-            $grid->column('value');
+            if(config('admin.DISABLE_ADMIN_OPTION_SHOW')){
+                $grid->column('value')->display(function(){
+                    return "******";
+                });
+            }else{
+                $grid->column('value');
+            }
+            //$grid->column('value');
             $grid->column('created_at');
             $grid->column('updated_at')->sortable();
         
