@@ -19,3 +19,6 @@ Route::get('/', function () {
     //return $service = $container->get('Service');
     return redirect('/admin');
 });
+Route::get('/dev/Plugin', function (PluginManager $pluginManager) {
+    return $pluginManager->getAllPlugins();
+});

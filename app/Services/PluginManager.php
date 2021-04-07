@@ -14,7 +14,7 @@ class PluginManager{
         $arr = getPath($path);
         $plugin_arr = [];
         foreach ($arr as $value) {
-            if(file_exists(app_path("Plugins/".$value."/"."boot.php")) && file_exists(app_path("Plugins/".$value."/"."data.json"))){
+            if(file_exists(app_path("Plugins/".$value."/"."data.json"))){
                 $plugin_arr[$value]['path']=app_path("Plugins/".$value."/");
                 $ns = "\App\Plugins\\".$value."\\";
                 $plugin_arr[$value]['class']= $ns;
