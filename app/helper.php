@@ -130,3 +130,7 @@ function _port($text)
     $text = str_replace('www.', '', $text);
     return $text;
 }
+
+function plugin_path($path){
+    return app_path("Plugins/".$path);
+}
