@@ -4,28 +4,24 @@ namespace App\Console\Commands\BotPro;
 
 use App\Models\Option;
 use App\BotPro\Bootstrap;
-use App\Jobs\BotPro\RunJob;
 use App\Services\BotCore;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Artisan;
-use Illuminated\Console\WithoutOverlapping;
 
-class Run extends Command
+class RunDetail extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    use WithoutOverlapping;
-    protected $signature = 'BotPro';
+    protected $signature = 'BotPro:RunDetail';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = '运行机器人';
+    protected $description = 'BotPro运行中展示细节';
 
     /**
      * Create a new command instance.
@@ -44,7 +40,6 @@ class Run extends Command
      */
     public function handle()
     {
-        
         $run = new Bootstrap();
         if ($run->Check()) { 
             if(!get_options_count("BOT_START")){
@@ -54,7 +49,21 @@ class Run extends Command
                     'created_at' => date("Y-m-d H:i:s")
                 ]);
             }
-            dispatch(new RunJob());
+            \Ratchet\Client\connect($run->zxws)->then(function($conn) {
+                $conn->on('message', function($msg) use ($conn) {
+                    if(!get_options_count("BOT_START")){
+                        $conn->close();
+                    }
+                    try {
+                        $this->info($msg."\n\n");
+                        $this->info((new BotCore)->Run($msg)."\n");
+                    } catch (\Throwable $th) {
+                        $this->error($th."\n");
+                    }
+                });
+            }, function ($e) {
+                $this->error("Could not connect: {$e->getMessage()}\n");
+            });
         } else {
             $this->error('连接失败,请确保机器人设置完整');
         }
