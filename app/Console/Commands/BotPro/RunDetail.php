@@ -42,20 +42,13 @@ class RunDetail extends Command
     {
         $run = new Bootstrap();
         if ($run->Check()) { 
-            if(!get_options_count("BOT_START")){
-                Option::insert([
-                    'name' => 'BOT_START',
-                    'value' => 1,
-                    'created_at' => date("Y-m-d H:i:s")
-                ]);
-            }
             \Ratchet\Client\connect($run->zxws)->then(function($conn) {
                 $conn->on('message', function($msg) use ($conn) {
                     if(!get_options_count("BOT_START")){
                         $conn->close();
                     }
                     try {
-                        $this->info($msg."\n\n");
+                        $this->info($msg."\n");
                         $this->info((new BotCore)->Run($msg)."\n");
                     } catch (\Throwable $th) {
                         $this->error($th."\n");
