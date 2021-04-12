@@ -46,12 +46,13 @@ class RunDetail extends Command
                 $conn->on('message', function($msg) use ($conn) {
                     if(!get_options_count("BOT_START")){
                         $conn->close();
-                    }
-                    try {
-                        $this->info($msg."\n");
-                        $this->info((new BotCore)->Run($msg)."\n");
-                    } catch (\Throwable $th) {
-                        $this->error($th."\n");
+                    }else{
+                        try {
+                            $this->info($msg."\n");
+                            $this->info((new BotCore)->Run($msg)."\n");
+                        } catch (\Throwable $th) {
+                            $this->error($th."\n");
+                        }
                     }
                 });
             }, function ($e) {

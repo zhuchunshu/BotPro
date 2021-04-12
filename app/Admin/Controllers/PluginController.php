@@ -28,9 +28,9 @@ class PluginController extends Controller
     {
         return new Grid(null, function (Grid $grid) {
             $grid->column('id', '插件标识')->explode()->label();
+            $grid->column('PluginName', '插件名称')->explode()->label();
             $grid->column('namespace', '插件命名空间')->explode('\\')->label();
             $grid->column('path', '插件路径');
-            //$grid->column('data', '插件信息')->explode(",");
             $grid->column('status', '开启/关闭')->status()->switch();
             $grid->disableRowSelector();
             //$grid->disableCreateButton();
@@ -55,7 +55,7 @@ class PluginController extends Controller
             $data[] = [
                 'id' => $key,
                 'name' => $key,
-                'data' => ($value['data']),
+                'PluginName' => ($value['data']['name']),
                 'path' => $value['path'],
                 'namespace' => $value['class'],
                 'status' => $check,

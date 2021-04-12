@@ -38,11 +38,12 @@ class RunJob implements ShouldQueue
             $conn->on('message', function($msg) use ($conn) {
                 if(!get_options_count("BOT_START")){
                     $conn->close();
-                }
-                try {
-                    (new BotCore)->Run($msg);
-                } catch (\Throwable $th) {
-                    throw new Exception($th);
+                }else{
+                    try {
+                        (new BotCore)->Run($msg);
+                    } catch (\Throwable $th) {
+                        throw new Exception($th);
+                    }
                 }
             });
         }, function ($e) {
