@@ -4,14 +4,13 @@ namespace App\BotPro\Event;
 
 use App\Models\Plugin;
 use App\Services\PluginManager;
-use Illuminate\Support\Facades\Http;
 use App\Models\BotCore as BotCoreModels;
 
 class notice
 {
     public function handle($data)
     {
-        if (@$data->group_id) {
+        if (@$data->group_id && get_options('BOT_NOTICE_AUTH')==1) {
             if (BotCoreModels::where(['type' => 'group', 'value' => $data->group_id])->count()) {
                 $pluginManager = new PluginManager();
                 foreach ($pluginManager->getAllPlugins() as $name => $value) {

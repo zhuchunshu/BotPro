@@ -10,7 +10,7 @@ class request {
 
     public function handle($data)
     {
-        if (@$data->group_id) {
+        if (@$data->group_id && get_options('BOT_REQUEST_AUTH')==1) {
             if (BotCoreModels::where(['type' => 'group', 'value' => $data->group_id])->count()) {
                 $pluginManager = new PluginManager();
                 foreach ($pluginManager->getAllPlugins() as $name => $value) {
