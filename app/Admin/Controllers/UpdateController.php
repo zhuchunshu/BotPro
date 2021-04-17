@@ -17,6 +17,7 @@ use App\Admin\Repositories\Update;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
 use App\BotPro\Update as BotProUpdate;
+use Illuminate\Support\Facades\Artisan;
 
 class UpdateController extends Controller
 {
@@ -76,7 +77,9 @@ class UpdateController extends Controller
             $content = "您禁用了远程更新功能";
         }else{
             if(BotProUpdate::check()){
-                $content = eval(BotProUpdate::update_new()['data']['method']);
+                exec("git reset --hard && git pull");
+                Artisan::call("BotPro:Update");
+                $content = "更新成功!";
             }else{
                 $content = "已是最新版，无需更新";
             }
@@ -123,13 +126,7 @@ class UpdateController extends Controller
                 $data['data']['class']['name'] . "版本ID为:" . $data['data']['id'] . "的更新内容",
                 Markdown::make("#### 版本号: {$data['data']['version']}
 #### 更新说明:
-{$data['data']['content']}
-#### 更新方法:") . Markdown::make(<<<HTML
-```php
-{$data['data']['method']}
-```
-HTML)
-            );
+{$data['data']['content']}"));
         } else {
             $card = Card::make($data['code'], $data['msg']);
         }
