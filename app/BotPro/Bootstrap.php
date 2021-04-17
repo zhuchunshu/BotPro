@@ -38,4 +38,11 @@ class Bootstrap{
             return false;
         }
     }
+
+    /**
+     * 程序版本
+     *
+     * @var integer
+     */
+    public $version = 0;
 }

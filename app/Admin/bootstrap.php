@@ -35,10 +35,10 @@ Admin::menu(function (Menu $menu) {
     $menu->add([
         [
             'id'            => 1, // 此id只要保证当前的数组中是唯一的即可
-            'title'         => '设置',
-            'icon'          => 'fa fa-fw fa-cog',
+            'title'         => '系统',
+            'icon'          => 'feather icon-layers',
             'uri'           => 'setting',
-            'parent_id'     => 0, 
+            'parent_id'     => 0,
             'roles'         => 'administrator', // 与角色绑定
         ],
         [
@@ -46,7 +46,7 @@ Admin::menu(function (Menu $menu) {
             'title'         => '核心授权',
             'icon'          => 'fa fa-fw fa-code-fork',
             'uri'           => 'BotCore',
-            'parent_id'     => 0, 
+            'parent_id'     => 0,
             'roles'         => 'administrator', // 与角色绑定
         ],
         [
@@ -54,8 +54,25 @@ Admin::menu(function (Menu $menu) {
             'title'         => '插件管理',
             'icon'          => 'feather icon-cpu',
             'uri'           => 'Plugin',
-            'parent_id'     => 0, 
+            'parent_id'     => 0,
             'roles'         => 'administrator', // 与角色绑定
-        ]
+        ],
+        [
+            'id'            => 4, // 此id只要保证当前的数组中是唯一的即可
+            'title'         => '设置',
+            'icon'          => '',
+            'uri'           => 'setting',
+            'parent_id'     => 1,
+            'roles'         => 'administrator', // 与角色绑定
+        ],
+        [
+            'id'            => 5, // 此id只要保证当前的数组中是唯一的即可
+            'title'         => '软件升级',
+            'icon'          => '',
+            'uri'           => 'update',
+            'parent_id'     => 1,
+            'roles'         => 'administrator', // 与角色绑定
+        ],
     ]);
 });
+
