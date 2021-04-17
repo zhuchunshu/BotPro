@@ -38,7 +38,7 @@ class Update extends Command
      */
     public function handle()
     {
-        Artisan::call("migrate ----force");
+        Artisan::call("migrate --force");
         $this->info("success");
     }
 }
