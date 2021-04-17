@@ -28,6 +28,8 @@ return [
 
     'env' => env('APP_ENV', 'production'),
 
+    'update' => env('BOTPRO_UPDATE',true),
+
     /*
     |--------------------------------------------------------------------------
     | Application Debug Mode

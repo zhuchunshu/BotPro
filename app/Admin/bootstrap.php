@@ -1,11 +1,14 @@
 <?php
 
-use Dcat\Admin\Admin;
-use Dcat\Admin\Grid;
 use Dcat\Admin\Form;
-use Dcat\Admin\Grid\Filter;
+use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
+use Dcat\Admin\Admin;
+use App\BotPro\Update;
+use Dcat\Admin\Grid\Filter;
 use Dcat\Admin\Layout\Menu;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Request;
 
 /**
  * Dcat-admin - admin builder based on Laravel.
@@ -75,4 +78,19 @@ Admin::menu(function (Menu $menu) {
         ],
     ]);
 });
+
+if(!request()->is('admin/update*')){
+    if (!Cache::get('admin.botpro.update', null)) {
+        if (Update::check()) {
+            Admin::script(
+                <<<JS
+                    Dcat.confirm('程序有更新，是否跳转查阅？', null, function () {
+                        location.href="/admin/update";
+                    });
+                JS
+            );
+        }
+        Cache::put('admin.botpro.update', 1,84600);
+    }
+}
 

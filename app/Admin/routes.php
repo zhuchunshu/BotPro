@@ -49,9 +49,8 @@ Route::group([
 
     $router->group(['prefix' => 'update'],function(Router $router){
         $router->get('/','UpdateController@index');
-        $router->get('/create','UpdateController@create');
         $router->get('/{id}','UpdateController@show');
-        $router->post('/','UpdateController@store');
+        $router->get('/@/Run','UpdateController@Run');
     });
 
 });

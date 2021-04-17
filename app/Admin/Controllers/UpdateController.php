@@ -5,14 +5,18 @@ namespace App\Admin\Controllers;
 use ZipArchive;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
+use Dcat\Admin\Admin;
+use Illuminate\Support\Str;
 use Dcat\Admin\Widgets\Card;
 use Dcat\Admin\Widgets\Form;
 use Illuminate\Http\Request;
 use Dcat\Admin\Layout\Content;
 use App\Services\PluginManager;
+use Dcat\Admin\Widgets\Markdown;
 use App\Admin\Repositories\Update;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
+use App\BotPro\Update as BotProUpdate;
 
 class UpdateController extends Controller
 {
@@ -29,6 +33,9 @@ class UpdateController extends Controller
             $grid->column('id', '版本id');
             $grid->column('version', '版本号');
             $grid->column('content', '更新说明');
+            $grid->column('content', '更新说明')->display(function ($text) {
+                return Str::limit($text, 30, '...');
+            });
             //$grid->column('value');
             $grid->column('created_at');
             $grid->column('updated_at')->sortable();
@@ -36,11 +43,46 @@ class UpdateController extends Controller
             $grid->disablePerPages();
             $grid->disableRowSelector();
             $grid->disableCreateButton();
-            $grid->tools('<a class="btn btn-primary disable-outline">测试按钮</a>');
+            $grid->disableEditButton();
+            $grid->disableDeleteButton();
+            $update = BotProUpdate::check();
+            if ($update === true) {
+                $grid->tools('<button class="btn btn-primary" id="update">立即更新</button>');
+            }
+            Admin::script(
+                <<<JS
+                    $("#update").click(function(){
+                        Dcat.confirm('确定要更新吗? 更新前做好备份！！！', null, function () {
+                            location.href="/admin/update/@/Run";
+                        });
+                    })
+                JS
+            );
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->equal('id');
             });
         });
+    }
+
+    public function Run(Content $content){
+        return $content
+        ->title($this->title())
+        ->description($this->description()['index'] ?? trans('admin.list'))
+        ->body($this->Run_show());
+    }
+
+    public function Run_show(){
+        if(!config('app.update')){
+            $content = "您禁用了远程更新功能";
+        }else{
+            if(BotProUpdate::check()){
+                $content = eval(BotProUpdate::update_new()['data']['method']);
+            }else{
+                $content = "已是最新版，无需更新";
+            }
+        }
+        $card = Card::make("BotPro软件更新", $content);
+        return $card;
     }
 
     /**
@@ -75,10 +117,20 @@ class UpdateController extends Controller
      */
     protected function detail($id)
     {
-        $data = Http::post('https://cfauth.node.tax/api/version/BotPro@'.$id.'/getData');
-        if($data['code']==200){
-            $card = Card::make($data['code'], $data['msg']);
-        }else{
+        $data = Http::post('https://cfauth.node.tax/api/version/BotPro@' . $id . '/getData');
+        if ($data['code'] == 200) {
+            $card = Card::make(
+                $data['data']['class']['name'] . "版本ID为:" . $data['data']['id'] . "的更新内容",
+                Markdown::make("#### 版本号: {$data['data']['version']}
+#### 更新说明:
+{$data['data']['content']}
+#### 更新方法:") . Markdown::make(<<<HTML
+```php
+{$data['data']['method']}
+```
+HTML)
+            );
+        } else {
             $card = Card::make($data['code'], $data['msg']);
         }
         return $card;
