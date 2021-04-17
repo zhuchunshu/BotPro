@@ -204,7 +204,7 @@ class PluginController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function update($name, Form $form)
+    public function update($name)
     {
         $status = request()->input('status', 0);
         if (ModelsPlugin::where('name', $name)->count()) {
