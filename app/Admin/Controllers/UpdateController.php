@@ -77,9 +77,7 @@ class UpdateController extends Controller
             $content = "您禁用了远程更新功能";
         }else{
             if(BotProUpdate::check()){
-                exec("git reset --hard && git pull");
-                Artisan::call("BotPro:Update");
-                $content = "更新成功!";
+                $content = shell_exec("cd ../ && ls && bash ./bootstrap/update.sh");
             }else{
                 $content = "已是最新版，无需更新";
             }
