@@ -30,6 +30,8 @@ return [
 
     'update' => env('BOTPRO_UPDATE',true),
 
+    'BOTPRO_DEMO' => env('BOTPRO_DEMO',false),
+
     /*
     |--------------------------------------------------------------------------
     | Application Debug Mode
