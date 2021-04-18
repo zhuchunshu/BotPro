@@ -15,6 +15,10 @@ class AccessControl
     protected $excepts = [
         'POST' => [
             'admin/auth/login',
+            'admin/form/step',
+            'admin/form',
+            'admin/dcat-api/value',
+            'admin/dcat-api/form',
         ],
     ];
 
