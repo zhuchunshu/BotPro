@@ -19,8 +19,8 @@ class BotAuth
     {
         $core = new Core();
         if(!$core->ver()){
-            if(!$request->is('admin/auth','admin/auth/*','admin/Core/auth')){
-                return redirect('admin/auth');
+            if(!$request->is(config('admin.route.prefix').'/auth',config('admin.route.prefix').'/auth/*',config('admin.route.prefix').'/Core/auth')){
+                return redirect(config('admin.route.prefix').'/auth');
             }
             return $next($request);
         }else{
