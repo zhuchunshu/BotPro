@@ -79,13 +79,14 @@ Admin::menu(function (Menu $menu) {
     ]);
 });
 
-if(!request()->is('admin/update*')){
+if(!request()->is(config('admin.route.prefix').'/update*')){
     if (!Cache::get('admin.botpro.update', null)) {
         if (Update::check()) {
+            $r = config('admin.route.prefix');
             Admin::script(
                 <<<JS
                     Dcat.confirm('程序有更新，是否跳转查阅？', null, function () {
-                        location.href="/admin/update";
+                        location.href="/{$r}/update";
                     });
                 JS
             );

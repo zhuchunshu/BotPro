@@ -12,15 +12,6 @@ class AccessControl
 {
     protected $denyMethods = ['POST', 'PUT', 'DELETE'];
 
-    protected $excepts = [
-        'POST' => [
-            'admin/auth/login',
-            'admin/form/step',
-            'admin/form',
-            'admin/dcat-api/value',
-            'admin/dcat-api/form',
-        ],
-    ];
 
     /**
      * Handle an incoming request.
@@ -34,7 +25,16 @@ class AccessControl
         if(!config('app.BOTPRO_DEMO')){
             return $next($request); 
         }
-        foreach ($this->excepts as $method => $route) {
+        $excepts=[
+            'POST' => [
+                config('admin.route.prefix').'/auth/login',
+                config('admin.route.prefix').'/form/step',
+                config('admin.route.prefix').'/form',
+                config('admin.route.prefix').'/dcat-api/value',
+                config('admin.route.prefix').'/dcat-api/form',
+            ],
+        ];
+        foreach ($excepts as $method => $route) {
             if ($request->isMethod($method) && $request->is(...$route)) {
                 return $next($request);
             }

@@ -50,11 +50,12 @@ class UpdateController extends Controller
             if ($update === true) {
                 $grid->tools('<button class="btn btn-primary" id="update">立即更新</button>');
             }
+            $r = config('admin.route.prefix');
             Admin::script(
                 <<<JS
                     $("#update").click(function(){
                         Dcat.confirm('确定要更新吗? 更新前做好备份！！！', null, function () {
-                            location.href="/admin/update/@/Run";
+                            location.href="/{$r}/update/@/Run";
                         });
                     })
                 JS
