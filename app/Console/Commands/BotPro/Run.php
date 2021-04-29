@@ -18,7 +18,7 @@ class Run extends Command
      * @var string
      */
     use WithoutOverlapping;
-    protected $signature = 'BotPro:Run';
+    protected $signature = 'BotPro';
 
     /**
      * The console command description.
