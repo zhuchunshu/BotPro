@@ -38,6 +38,7 @@ class Watcher extends Command
      */
     public function handle()
     {
+        $this->info("BotPro-Watcher已启动");
         $watcher = new \App\BotPro\Watcher\Watcher(app_path(), function ($event) {
             if(!get_options_count("BOT_START")){
                 Option::insert([
