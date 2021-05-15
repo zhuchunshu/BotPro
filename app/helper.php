@@ -134,3 +134,17 @@ function _port($text)
 function plugin_path($path){
     return app_path("Plugins/".$path);
 }
+
+/**
+ * 读取插件data.json文件
+ *
+ * @param string 插件目录名 $name
+ */
+function read_plugin_data(string $name, $bool = true)
+{
+    if ($bool === true) {
+        return json_decode(@read_file(plugin_path($name . "/data.json")));
+    } else {
+        return json_decode(@read_file(plugin_path($name . "/data.json")), true);
+    }
+}

@@ -7,14 +7,15 @@ use Faker\Factory;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
 use Dcat\Admin\Show;
+use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use Dcat\Admin\Layout\Content;
 use App\Services\PluginManager;
 use Madnest\Madzipper\Madzipper;
 use App\Admin\Repositories\Plugin;
 use App\Http\Controllers\Controller;
-use App\Models\Plugin as ModelsPlugin;
 use Illuminate\Support\Facades\File;
+use App\Models\Plugin as ModelsPlugin;
 use Illuminate\Support\Facades\Storage;
 
 class PluginController extends Controller
@@ -206,6 +207,11 @@ class PluginController extends Controller
      */
     public function update($name)
     {
+        $data = read_plugin_data($name,false);
+        if(@Arr::has($data,"dirname") && $data['dirname']!=$name){
+            rename(plugin_path($name),plugin_path($data['dirname']));
+            $name = $data['dirname'];
+        }
         $status = request()->input('status', 0);
         if (ModelsPlugin::where('name', $name)->count()) {
             // 存在
