@@ -78,12 +78,7 @@ class UpdateController extends Controller
             $content = "您禁用了远程更新功能";
         }else{
             if(BotProUpdate::check()){
-                $content = Markdown::make('安全起见，请手动更新，操作步骤：
-```shell
-打开ssh
-cd到网站根目录下
-执行: sudo bash ./bootstrap/update.sh
-```');
+                $content = shell_exec('cd ../ && bash ./bootstrap/update2.sh');
             }else{
                 $content = "已是最新版，无需更新";
             }
