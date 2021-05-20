@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\Option;
+use App\BotPro\Bootstrap;
+use App\Services\BotCore;
 use App\Services\PluginManager;
 use Illuminate\Support\Facades\Route;
 use Psr\Container\ContainerInterface;
@@ -16,9 +19,16 @@ use Psr\Container\ContainerInterface;
 */
 
 Route::get('/', function () {
-    //return $service = $container->get('Service');
-    return redirect('/admin');
+    ob_end_clean();
+    ob_implicit_flush(1);
+    $i = 1;
+    while (true) {
+        echo $i."<br>";
+        $i++;
+        sleep(1);
+    }
 });
+
 Route::get('/dev/Plugin', function (PluginManager $pluginManager) {
     return $pluginManager->getAllPlugins();
 });

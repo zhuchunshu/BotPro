@@ -44,5 +44,5 @@ class Bootstrap{
      *
      * @var integer
      */
-    public $version = 9;
+    public $version = 10;
 }
