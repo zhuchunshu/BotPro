@@ -41,12 +41,7 @@ class RunInfo extends Command
     public function handle()
     {
         
-        $run = new Bootstrap();
-        if ($run->Check()) {
-            $this->r();
-        } else {
-            $this->error('连接失败,请确保机器人设置完整');
-        }
+        $this->r();
         //return 0;
     }
     public function r()

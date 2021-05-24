@@ -39,9 +39,11 @@ class Restart extends Command
      */
     public function handle()
     {
-        if(get_options_count("BOT_START")){
-            Option::where('name','BOT_START')->delete();
-        }
+        Option::insert([
+            'name' => 'BOT_START',
+            'value' => "stop",
+            'created_at' => date("Y-m-d H:i:s")
+        ]);
         
     }
 }
