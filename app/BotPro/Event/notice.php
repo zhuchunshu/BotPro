@@ -16,7 +16,7 @@ class notice
                 foreach ($pluginManager->getAllPlugins() as $name => $value) {
                     $value['PluginMark'] = $name;
                     if (Plugin::where(['name' => $name, 'status' => 1])->count()) {
-                        if (@count($value['data']['post_type']['notice'][$data->notice_type])) {
+                        if (@$value['data']['post_type']['notice'][$data->notice_type] && @count($value['data']['post_type']['notice'][$data->notice_type])) {
                             foreach ($value['data']['post_type']['notice'][$data->notice_type] as $dataClass) {
                                 $c = $value['class'] . "src\\" . $dataClass;
                                 if (method_exists(new $c(), 'register')) {
@@ -39,7 +39,7 @@ class notice
             foreach ($pluginManager->getAllPlugins() as $name => $value) {
                 $value['PluginMark'] = $name;
                 if (Plugin::where(['name' => $name, 'status' => 1])->count()) {
-                    if (@count($value['data']['post_type']['notice'][$data->notice_type])) {
+                    if (@$value['data']['post_type']['notice'][$data->notice_type] && @count($value['data']['post_type']['notice'][$data->notice_type])) {
                         foreach ($value['data']['post_type']['notice'][$data->notice_type] as $dataClass) {
                             $c = $value['class'] . "src\\" . $dataClass;
                             if (method_exists(new $c(), 'register')) {

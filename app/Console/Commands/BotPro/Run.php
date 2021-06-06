@@ -44,10 +44,28 @@ class Run extends Command
      */
     public function handle()
     {
-        
+
         $run = new Bootstrap();
         if ($run->Check()) {
-            passthru('php artisan BotPro:Run');
+            $run = new Bootstrap();
+            \Ratchet\Client\connect($run->zxws)->then(function ($conn) {
+                $conn->on('message', function ($msg) use ($conn) {
+                    try {
+                        if (get_options_count("BOT_START")) {
+                            Option::where('name', 'BOT_START')->delete();
+                            $conn->close();
+                            $this->info($msg . "\n\n重载\n");
+                            system("php artisan BotPro:Run");
+                        }
+                        $this->info($msg . "\n");
+                        $this->info((new BotCore)->Run($msg) . "\n");
+                    } catch (\Throwable $th) {
+                        $this->error($th . "\n");
+                    }
+                });
+            }, function ($e) {
+                $this->error("Could not connect: {$e->getMessage()}\n");
+            });
         } else {
             $this->error('连接失败,请确保机器人设置完整');
         }

@@ -17,7 +17,7 @@ class message
             foreach ($pluginManager->getAllPlugins() as $name => $value) {
                 $value['PluginMark'] = $name;
                 if (Plugin::where(['name' => $name, 'status' => 1])->count()) {
-                    if (@count($value['data']['post_type']['message']['group'])) {
+                    if (@$value['data']['post_type']['message']['group'] && @count($value['data']['post_type']['message']['group'])) {
                         foreach ($value['data']['post_type']['message']['group'] as $dataClass) {
                             $c = $value['class'] . "src\\" . $dataClass;
                             if (method_exists(new $c(), 'register')) {
@@ -43,7 +43,7 @@ class message
         foreach ($pluginManager->getAllPlugins() as $name => $value) {
             $value['PluginMark'] = $name;
             if (Plugin::where(['name' => $name, 'status' => 1])->count()) {
-                if (@count($value['data']['post_type']['message']['private'])) {
+                if (@$value['data']['post_type']['message']['private'] && @count($value['data']['post_type']['message']['private'])) {
                     foreach ($value['data']['post_type']['message']['private'] as $dataClass) {
                         $c = $value['class'] . "src\\" . $dataClass;
                         if (method_exists(new $c(), 'register')) {
