@@ -23,6 +23,6 @@ class CoreServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->app->call("\App\Services\Core@handle");
+        
     }
 }

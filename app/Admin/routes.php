@@ -47,10 +47,5 @@ Route::group([
         $router->post('/','PluginController@store');
     });
 
-    $router->group(['prefix' => 'update'],function(Router $router){
-        $router->get('/','UpdateController@index');
-        $router->get('/{id}','UpdateController@show');
-        $router->get('/@/Run','UpdateController@Run');
-    });
 
 });

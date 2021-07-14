@@ -45,10 +45,5 @@ class BotCore
     {
         return (new request())->handle($data);
     }
-    public function boot()
-    {
-        if ("7425aaa400a2ca75759eb1507a617605" != md5_file(base_path("bootstrap/app.php"))) {
-            dd(base64_decode("57O757uf5paH5Lu25o2f5Z2P77yM5bu66K6u6YeN6KOF"));
-        }
-    }
+    
 }

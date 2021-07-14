@@ -19,14 +19,7 @@ use Psr\Container\ContainerInterface;
 */
 
 Route::get('/', function () {
-    ob_end_clean();
-    ob_implicit_flush(1);
-    $i = 1;
-    while (true) {
-        echo $i."<br>";
-        $i++;
-        sleep(1);
-    }
+    return "BotPro is Ok";
 });
 
 Route::get('/dev/Plugin', function (PluginManager $pluginManager) {
